@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Include database connection
-require_once 'config/database.php';
+require_once __DIR__ . '/config/database.php';
 
 // If cart is empty and no order was just completed, redirect to shop
 $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];

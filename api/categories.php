@@ -1,7 +1,7 @@
 <?php
 // api/categories.php - REST API endpoint for retrieving product categories
 header('Content-Type: application/json');
-require_once '../config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 try {
     $stmt = $pdo->query("SELECT * FROM categories ORDER BY name ASC");
