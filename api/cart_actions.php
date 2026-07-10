@@ -1,11 +1,10 @@
 <?php
 // api/cart_actions.php - Handle shopping cart session operations
+require_once __DIR__ . '/../config/database.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-require_once __DIR__ . '/../config/database.php';
 
 // Prepare standard JSON response or Redirect helper
 function respond($success, $message, $redirectUrl = '../cart.php') {

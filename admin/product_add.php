@@ -1,10 +1,7 @@
 <?php
 // admin/product_add.php - Add New Product with Image Upload support
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-require_once __DIR__ . '/../includes/auth_check.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/auth_check.php';
 
 // Fetch categories for dropdown
 try {

@@ -1,10 +1,7 @@
 <?php
 // admin/products.php - Manage Product Catalog (List and Delete)
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-require_once __DIR__ . '/../includes/auth_check.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/auth_check.php';
 
 // Handle delete action
 if (isset($_GET['action']) && $_GET['action'] === 'delete') {

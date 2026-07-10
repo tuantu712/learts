@@ -1,11 +1,7 @@
 <?php
 // api/products.php - REST API endpoint for products (GET listing + Admin CRUD operations)
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-header('Content-Type: application/json');
 require_once __DIR__ . '/../config/database.php';
+header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
 

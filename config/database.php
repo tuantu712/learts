@@ -1,6 +1,61 @@
 <?php
 // Config/database.php - Connects to MySQL using PDO
 
+if (!class_exists('DatabaseSessionHandler')) {
+    class DatabaseSessionHandler implements SessionHandlerInterface {
+        private $pdo;
+        public function __construct($pdo) {
+            $this->pdo = $pdo;
+        }
+        public function open($savePath, $sessionName): bool {
+            return true;
+        }
+        public function close(): bool {
+            return true;
+        }
+        public function read($id): string {
+            try {
+                $stmt = $this->pdo->prepare("SELECT data FROM sessions WHERE id = :id");
+                $stmt->execute(['id' => $id]);
+                $val = $stmt->fetchColumn();
+                return $val !== false ? $val : '';
+            } catch (\Exception $e) {
+                return '';
+            }
+        }
+        public function write($id, $data): bool {
+            try {
+                $stmt = $this->pdo->prepare("REPLACE INTO sessions (id, data, access) VALUES (:id, :data, :access)");
+                return $stmt->execute([
+                    'id' => $id,
+                    'data' => $data,
+                    'access' => time()
+                ]);
+            } catch (\Exception $e) {
+                return false;
+            }
+        }
+        public function destroy($id): bool {
+            try {
+                $stmt = $this->pdo->prepare("DELETE FROM sessions WHERE id = :id");
+                return $stmt->execute(['id' => $id]);
+            } catch (\Exception $e) {
+                return false;
+            }
+        }
+        public function gc($maxlifetime): int|false {
+            try {
+                $old = time() - $maxlifetime;
+                $stmt = $this->pdo->prepare("DELETE FROM sessions WHERE access < :old");
+                $stmt->execute(['old' => $old]);
+                return true;
+            } catch (\Exception $e) {
+                return false;
+            }
+        }
+    }
+}
+
 $host = getenv('DB_HOST') ?: 'localhost';
 $port = getenv('DB_PORT') ?: '3308';
 $db   = getenv('DB_NAME') ?: 'learts_db';
@@ -17,6 +72,20 @@ $options = [
 
 try {
      $pdo = new PDO($dsn, $user, $pass, $options);
+
+     // Auto-create sessions table if not exists
+     $pdo->exec("CREATE TABLE IF NOT EXISTS sessions (
+         id VARCHAR(255) NOT NULL PRIMARY KEY,
+         data TEXT NOT NULL,
+         access INT NOT NULL
+     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+     // Register Database Session Handler
+     if (session_status() === PHP_SESSION_NONE) {
+         $handler = new DatabaseSessionHandler($pdo);
+         session_set_save_handler($handler, true);
+         session_start();
+     }
 } catch (\PDOException $e) {
      $db_error_message = $e->getMessage();
      ?>

@@ -1,11 +1,7 @@
 <?php
 // includes/header.php - Dynamic Client Header
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Include database connection
+// Include database connection (starts session via DB handler)
 require_once __DIR__ . '/../config/database.php';
 
 // Fetch categories for navbar

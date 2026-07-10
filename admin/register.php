@@ -1,14 +1,12 @@
 <?php
 // admin/register.php - Admin Registration Page
-session_start();
+require_once __DIR__ . '/../config/database.php';
 
 // If already logged in, redirect to dashboard
 if (isset($_SESSION['admin_id'])) {
     header('Location: dashboard.php');
     exit;
 }
-
-require_once __DIR__ . '/../config/database.php';
 
 $errors = [];
 $username = '';

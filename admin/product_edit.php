@@ -1,10 +1,7 @@
 <?php
 // admin/product_edit.php - Edit Existing Product details
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-require_once __DIR__ . '/../includes/auth_check.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/auth_check.php';
 
 // Validate ID
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;

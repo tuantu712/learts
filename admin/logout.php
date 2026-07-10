@@ -1,6 +1,6 @@
 <?php
 // admin/logout.php - Destroy admin session and logout
-session_start();
+require_once __DIR__ . '/../config/database.php';
 
 // Unset all admin variables
 unset($_SESSION['admin_id']);

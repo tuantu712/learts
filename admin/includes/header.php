@@ -1,13 +1,11 @@
 <?php
 // admin/includes/header.php - Admin Header & Navigation
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// Include database connection (starts session via DB handler)
+require_once __DIR__ . '/../../config/database.php';
 
 // Enforce authentication
 require_once __DIR__ . '/../../includes/auth_check.php';
-require_once __DIR__ . '/../../config/database.php';
 
 // Get current page name for active states
 $current_page = basename($_SERVER['PHP_SELF']);
